@@ -277,7 +277,7 @@ export default function Dashboard({ prospects: initial }) {
 
       {/* Delete confirm */}
       {confirm && (
-        <div className={styles.overlay} onClick={() => setConfirm(null)}>
+        <div className={`${styles.overlay} ${styles.overlayVisible}`} onClick={() => setConfirm(null)}>
           <div className={styles.confirmBox} onClick={e => e.stopPropagation()}>
             <p className={styles.confirmText}>
               Delete <strong>{confirm.name}</strong>? This cannot be undone.

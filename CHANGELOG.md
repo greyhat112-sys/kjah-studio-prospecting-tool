@@ -2,6 +2,13 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.6.1] — 2026-05-22
+
+### Fixed
+- **Delete confirm modal invisible / column "freeze"** — the delete confirmation rendered `.overlay` without the `.overlayVisible` class. `.overlay` defaults to `opacity: 0`, so the confirm dialog was completely invisible while still mounting a full-screen `z-index: 100` overlay over everything. Clicking Delete appeared to do nothing and made the column unclickable (the invisible overlay was intercepting all pointer events). Added `overlayVisible` to the confirm overlay.
+
+---
+
 ## [1.6.0] — 2026-05-22
 
 ### Added
