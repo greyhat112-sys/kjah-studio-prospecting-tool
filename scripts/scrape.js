@@ -195,7 +195,6 @@ async function run() {
         // Check website for Instagram handle
         let instagram = null
         if (detail.website) {
-          process.stdout.write(`  [check] ${detail.name} — looking for Instagram…\r`)
           instagram = await findInstagram(detail.website)
         }
 
