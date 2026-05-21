@@ -31,6 +31,7 @@ export default function Dashboard({ prospects: initial }) {
   const [panel, setPanel]           = useState(null)
   const [confirm, setConfirm]       = useState(null)
   const [editStatus, setEditStatus] = useState(null)
+  const [deletingId, setDeletingId] = useState(null)
 
   // Sync when server refreshes
   useEffect(() => { setProspects(initial) }, [initial])
@@ -203,10 +204,16 @@ export default function Dashboard({ prospects: initial }) {
               </thead>
               <tbody>
                 {visible.map(p => (
-                  <tr key={p.id}>
+                  <tr key={p.id} className={deletingId === p.id ? styles.rowDeleting : ''}>
                     <td>
-                      <div className={styles.name}>{p.name}</div>
-                      <div className={styles.biz}>{p.business}</div>
+                      <div className={styles.nameCell}>
+                        <span className={`${styles.dot} ${styles[`dot_${p.priority || 'medium'}`]}`} />
+                        <div>
+                          <div className={styles.name}>{p.name}</div>
+                          <div className={styles.biz}>{p.business}</div>
+                          {p.assignedTo && <div className={styles.assigned}>{p.assignedTo}</div>}
+                        </div>
+                      </div>
                     </td>
                     <td className={styles.contact}>{p.contact || '—'}</td>
                     <td>
@@ -266,8 +273,11 @@ export default function Dashboard({ prospects: initial }) {
             <div className={styles.confirmActions}>
               <button className={styles.cancelBtn} onClick={() => setConfirm(null)}>Cancel</button>
               <form action={async fd => {
-                setProspects(prev => prev.filter(p => p.id !== confirm.id))
+                setDeletingId(confirm.id)
                 setConfirm(null)
+                await new Promise(r => setTimeout(r, 260))
+                setProspects(prev => prev.filter(p => p.id !== confirm.id))
+                setDeletingId(null)
                 await removeProspect(fd)
                 refresh()
               }}>
