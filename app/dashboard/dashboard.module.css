@@ -380,6 +380,9 @@
 
 /* ── Priority dot ─────────────────────────────── */
 .nameCell { display: flex; align-items: flex-start; gap: 10px; }
+/* min-width:0 lets the text block shrink below content size so it can ellipsis */
+.nameText { min-width: 0; }
+.nameTd { cursor: pointer; }
 
 .dot {
   width: 7px;
@@ -695,6 +698,16 @@
 /* ── Mobile — iPad (≤1024px) ──────────────────── */
 @media (max-width: 1024px) {
   .stats > div:first-child .statNum { font-size: 64px; }
+
+  /* Truncate name/business to one line each so the column can't crush the
+     text into many wrapped lines (which made rows extremely tall). */
+  .nameText { max-width: 200px; }
+  .name, .biz, .assigned {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
 }
 
 /* ── Mobile — iPhone (≤768px) ────────────────── */
@@ -731,6 +744,7 @@
   .tableWrap { margin: var(--space-sm) var(--space-md); }
   .table td  { padding: 8px var(--space-sm); }
   .table th  { padding: var(--space-xs) var(--space-sm); }
+  .nameText  { max-width: 150px; }
 
   /* Panel — full width on phone */
   .panel     { max-width: 100%; }

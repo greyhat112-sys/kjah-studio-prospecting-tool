@@ -210,10 +210,10 @@ export default function Dashboard({ prospects: initial }) {
               <tbody>
                 {visible.map(p => (
                   <tr key={p.id} className={deletingId === p.id ? styles.rowDeleting : ''}>
-                    <td>
+                    <td className={styles.nameTd} onClick={() => setPanel(p)} title="Open details">
                       <div className={styles.nameCell}>
                         <span className={`${styles.dot} ${styles[`dot_${p.priority || 'medium'}`]}`} />
-                        <div>
+                        <div className={styles.nameText}>
                           <div className={styles.name}>{p.name}</div>
                           <div className={styles.biz}>{p.business}</div>
                           {p.assignedTo && <div className={styles.assigned}>{p.assignedTo}</div>}

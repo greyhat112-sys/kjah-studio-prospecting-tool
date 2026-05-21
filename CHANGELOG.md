@@ -2,6 +2,16 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.6.2] — 2026-05-22
+
+### Fixed
+- **Table rows extremely tall on mobile/tablet** — `.name` and `.biz` had no truncation, so on narrow viewports the crushed Name/Business column wrapped text into many lines, ballooning row height. On screens ≤1024px the name and business now truncate to a single line each with an ellipsis (`.nameText` capped at 200px on tablet, 150px on phone).
+
+### Changed
+- **Name/Business cell is now clickable** — clicking (or tapping) the Name/Business cell opens the prospect detail panel. Removes the need to scroll the table horizontally to reach the Edit button on mobile/tablet. Applies on all viewport sizes for consistency.
+
+---
+
 ## [1.6.1] — 2026-05-22
 
 ### Fixed
