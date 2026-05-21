@@ -75,10 +75,15 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
                 ].filter(Boolean).join(' ')}
                 draggable
                 onDragStart={e => {
+                  // Don't start a drag if the source is inside cardActions
+                  if (e.target.closest('.' + styles.cardActions)) {
+                    e.preventDefault()
+                    return
+                  }
                   setDragging(p)
                   e.dataTransfer.effectAllowed = 'move'
                 }}
-                onDragEnd={() => setDragging(null)}
+                onDragEnd={() => { setDragging(null); setDragOver(null) }}
                 onClick={() => onEdit(p)}
               >
                 <div className={styles.cardName}>{p.name}</div>
@@ -98,16 +103,30 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
                 {p.contact  && <div className={styles.cardContact}>{p.contact}</div>}
                 {p.followUp && <div className={styles.cardDate}>{formatDate(p.followUp)}</div>}
                 {p.notes    && <div className={styles.cardNotes}>{cleanNotes(p.notes)}</div>}
-                <div className={styles.cardActions}>
+                <div
+                  className={styles.cardActions}
+                  draggable={false}
+                  onDragStart={e => { e.preventDefault(); e.stopPropagation() }}
+                >
                   <button
                     className={styles.cardEdit}
                     onMouseDown={e => e.stopPropagation()}
-                    onClick={e => { e.stopPropagation(); onEdit(p) }}
+                    onClick={e => {
+                      e.stopPropagation()
+                      setDragging(null)
+                      setDragOver(null)
+                      onEdit(p)
+                    }}
                   >Edit</button>
                   <button
                     className={styles.cardDelete}
                     onMouseDown={e => e.stopPropagation()}
-                    onClick={e => { e.stopPropagation(); onDelete(p) }}
+                    onClick={e => {
+                      e.stopPropagation()
+                      setDragging(null)
+                      setDragOver(null)
+                      onDelete(p)
+                    }}
                   >Delete</button>
                 </div>
               </div>
