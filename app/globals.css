@@ -1,0 +1,37 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cyan:    #4DDFF0;
+  --amber:   #FDD03C;
+  --pink:    #E05070;
+  --black:   #000000;
+  --surface: #0c0c0c;
+  --raised:  #141414;
+  --border:  rgba(255,255,255,0.08);
+  --text:    #ffffff;
+  --text-sec:#888888;
+  --text-off:#555555;
+
+  --status-cold:       #555;
+  --status-contacted:  #4a7cdc;
+  --status-interested: #FDD03C;
+  --status-converted:  #4DDFF0;
+  --status-lost:       #E05070;
+}
+
+html, body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button { cursor: pointer; }
