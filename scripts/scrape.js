@@ -69,12 +69,14 @@ async function findInstagram(url) {
 
 // ── Supabase ─────────────────────────────────────────────────────────────────
 
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  console.error('\nMissing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local\n')
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY
+
+if (!process.env.SUPABASE_URL || !SUPABASE_KEY) {
+  console.error('\nMissing SUPABASE_URL or SUPABASE_SERVICE_KEY in .env.local\n')
   process.exit(1)
 }
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
+const supabase = createClient(process.env.SUPABASE_URL, SUPABASE_KEY)
 
 // ── Google Maps extraction ────────────────────────────────────────────────────
 
