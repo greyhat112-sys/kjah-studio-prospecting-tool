@@ -69,12 +69,12 @@ async function findInstagram(url) {
 
 // ── Supabase ─────────────────────────────────────────────────────────────────
 
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
-  console.error('\nMissing SUPABASE_URL or SUPABASE_SERVICE_KEY in .env.local\n')
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.error('\nMissing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local\n')
   process.exit(1)
 }
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 
 // ── Google Maps extraction ────────────────────────────────────────────────────
 
@@ -203,6 +203,7 @@ async function run() {
           name:     detail.name,
           business: detail.name,
           contact:  contactParts.join(' · '),
+          website:  detail.website || null,
           status:   'cold',
           source:   'google-maps',
           notes:    notesParts.join(' — '),
@@ -217,10 +218,10 @@ async function run() {
         existing.add(bizKey)
         inserted.push(row)
 
-        const ig   = instagram ? ` ${instagram}` : ''
-        const ph   = detail.phone ? `  ${detail.phone}` : ''
-        const cat  = detail.category ? `  ${detail.category}` : ''
-        console.log(`  [${String(inserted.length).padStart(2)}/${LIMIT}] ${detail.name}${cat}${ph}${ig}`)
+        const ig  = instagram ? ` · ${instagram}` : ''
+        const ph  = detail.phone ? ` · ${detail.phone}` : ''
+        const web = detail.website ? ` · ${detail.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}` : ' · no website'
+        console.log(`  [${String(inserted.length).padStart(2)}/${LIMIT}] ${detail.name}${ph}${ig}${web}`)
 
         await sleep(jitter(1000, 1000))
 

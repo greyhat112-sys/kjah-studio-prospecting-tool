@@ -120,6 +120,11 @@ export default function ProspectPanel({ prospect, onClose }) {
             <input name="contact" defaultValue={prospect?.contact ?? ''} className={styles.field} placeholder="@handle · email · phone" />
           </label>
 
+          <label className={styles.fieldLabel}>
+            Website
+            <input name="website" defaultValue={prospect?.website ?? ''} className={styles.field} placeholder="https://example.com" />
+          </label>
+
           <div className={styles.fieldRow}>
             <label className={styles.fieldLabel}>
               Status

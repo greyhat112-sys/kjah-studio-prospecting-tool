@@ -247,6 +247,28 @@
   white-space: nowrap;
 }
 
+.tdWebsite { max-width: 200px; }
+
+.websiteLink {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--interactive);
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: opacity 150ms;
+}
+.websiteLink:hover { opacity: 0.75; }
+
+.noWebsite {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+
 .tdMono {
   font-family: 'Space Mono', monospace;
   color: var(--text-secondary);

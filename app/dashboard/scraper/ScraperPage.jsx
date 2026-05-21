@@ -127,8 +127,8 @@ export default function ScraperPage({ prospects }) {
                 <thead>
                   <tr>
                     <th>Business</th>
+                    <th>Website</th>
                     <th>Contact</th>
-                    <th>Notes</th>
                     <th>Status</th>
                     <th>Date</th>
                   </tr>
@@ -137,8 +137,14 @@ export default function ScraperPage({ prospects }) {
                   {prospects.map(p => (
                     <tr key={p.id}>
                       <td className={styles.tdBiz}>{p.business}</td>
+                      <td className={styles.tdWebsite}>
+                        {p.website
+                          ? <a href={p.website} target="_blank" rel="noopener noreferrer" className={styles.websiteLink}>
+                              {p.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                            </a>
+                          : <span className={styles.noWebsite}>No website</span>}
+                      </td>
                       <td className={styles.tdMono}>{p.contact || '—'}</td>
-                      <td className={styles.tdNotes}>{p.notes || '—'}</td>
                       <td>
                         <span className={`${styles.badge} ${styles[`badge_${p.status}`]}`}>
                           {STATUS_LABEL[p.status]}

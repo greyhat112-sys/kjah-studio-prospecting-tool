@@ -198,6 +198,7 @@ export default function Dashboard({ prospects: initial }) {
                 <tr>
                   <th className={styles.sortable} onClick={() => toggleSort('name')}>Name / Business{sortIcon('name')}</th>
                   <th className={styles.sortable} onClick={() => toggleSort('contact')}>Contact{sortIcon('contact')}</th>
+                  <th>Website</th>
                   <th className={styles.sortable} onClick={() => toggleSort('status')}>Status{sortIcon('status')}</th>
                   <th className={styles.sortable} onClick={() => toggleSort('followUp')}>Follow-up{sortIcon('followUp')}</th>
                   <th>Notes</th>
@@ -218,6 +219,13 @@ export default function Dashboard({ prospects: initial }) {
                       </div>
                     </td>
                     <td className={styles.contact}>{p.contact || '—'}</td>
+                    <td className={styles.websiteCell}>
+                      {p.website
+                        ? <a href={p.website} target="_blank" rel="noopener noreferrer" className={styles.websiteLink}>
+                            {p.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                          </a>
+                        : <span className={styles.websiteEmpty}>No website</span>}
+                    </td>
                     <td>
                       {editStatus === p.id ? (
                         <select
