@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { removeProspect, logout, updateStatus } from './actions'
 import ProspectPanel from './ProspectPanel'
 import KanbanBoard from './KanbanBoard'
@@ -118,6 +119,7 @@ export default function Dashboard({ prospects: initial }) {
               <button className={`${styles.viewBtn} ${view === 'table'  ? styles.viewActive : ''}`} onClick={() => setView('table')}>Table</button>
               <button className={`${styles.viewBtn} ${view === 'kanban' ? styles.viewActive : ''}`} onClick={() => setView('kanban')}>Kanban</button>
             </div>
+            <Link href="/dashboard/scraper" className={styles.scraperBtn}>Scraper</Link>
             <button className={styles.addBtn} onClick={() => setPanel('new')}>+ Add</button>
             <form action={logout}>
               <button type="submit" className={styles.logoutBtn}>Log out</button>

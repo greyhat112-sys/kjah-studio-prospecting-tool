@@ -53,6 +53,21 @@
 }
 .addBtn:hover { opacity: 0.85; }
 
+.scraperBtn {
+  background: transparent;
+  border: 1px solid var(--border-visible);
+  border-radius: 999px;
+  padding: var(--space-sm) var(--space-lg);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 150ms, border-color 150ms;
+}
+.scraperBtn:hover { color: var(--text-display); border-color: var(--text-secondary); }
+
 .logoutBtn {
   background: transparent;
   border: 1px solid var(--border-visible);
