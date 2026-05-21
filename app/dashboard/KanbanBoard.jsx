@@ -14,6 +14,15 @@ function formatDate(str) {
   return `${d}/${m}/${y}`
 }
 
+function cleanNotes(str) {
+  if (!str) return str
+  return Array.from(str).filter(ch => {
+    const c = ch.codePointAt(0)
+    // Drop C0 controls (0-31), DEL (127), C1 controls (128-159), U+FFFD (65533)
+    return c >= 32 && c !== 127 && (c < 128 || c > 159) && c !== 65533
+  }).join('').trim()
+}
+
 export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelete }) {
   const [dragging, setDragging] = useState(null)
   const [dragOver, setDragOver] = useState(null)
@@ -46,7 +55,7 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
           }}
         >
           <div className={styles.colHeader}>
-            <span className={`${styles.colTitle} ${styles[`col_${status}`]}`}>
+            <span className={`${styles.colTitle} ${styles['col_' + status]}`}>
               {STATUS_LABEL[status]}
             </span>
             <span className={styles.colCount}>{byStatus[status].length}</span>
@@ -59,7 +68,11 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
             {byStatus[status].map(p => (
               <div
                 key={p.id}
-                className={`${styles.card} ${dragging?.id === p.id ? styles.cardDragging : ''}`}
+                className={[
+                  styles.card,
+                  styles['card_' + (p.priority || 'medium')],
+                  dragging?.id === p.id ? styles.cardDragging : '',
+                ].filter(Boolean).join(' ')}
                 draggable
                 onDragStart={e => {
                   setDragging(p)
@@ -70,9 +83,21 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
               >
                 <div className={styles.cardName}>{p.name}</div>
                 <div className={styles.cardBiz}>{p.business}</div>
+                {p.website && (
+                  <a
+                    className={styles.cardWebsite}
+                    href={p.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onMouseDown={e => e.stopPropagation()}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {p.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                  </a>
+                )}
                 {p.contact  && <div className={styles.cardContact}>{p.contact}</div>}
                 {p.followUp && <div className={styles.cardDate}>{formatDate(p.followUp)}</div>}
-                {p.notes    && <div className={styles.cardNotes}>{p.notes}</div>}
+                {p.notes    && <div className={styles.cardNotes}>{cleanNotes(p.notes)}</div>}
                 <div className={styles.cardActions}>
                   <button
                     className={styles.cardEdit}

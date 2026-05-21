@@ -2,6 +2,25 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.6.0] — 2026-05-22
+
+### Added
+- **Website link on Kanban cards** — website shown as a truncated blue monospace link below the business name; clicking opens in a new tab without triggering the edit panel (stopPropagation on both mousedown and click).
+- **Priority left border on Kanban cards** — 3px colored left border per priority: red (high), amber (medium), muted (low). Visual scan without needing text labels.
+- **Nothing-style scrollbars** — 4px thin scrollbar across all scrollable areas; `--border-visible` track, darkens on hover. Applied globally in `globals.css`.
+
+### Fixed
+- **Kanban column header not sticky** — root cause was `padding: var(--space-md)` (all sides) on `.column` creating a 16px top gap that pushed the sticky header down. Fixed: column padding is now `0 var(--space-md) var(--space-md)` with `var(--space-md)` top padding moved inside `colHeader`. `z-index` raised to `2` so card `cardIn` animation stacking context can't bleed over it.
+- **Kanban card text overflow** — business name and other text fields broke out of the card boundary on narrow columns. Fixed: `word-break: break-word; overflow-wrap: anywhere` on all card text elements + `overflow: hidden` on the card itself.
+- **Square character in notes** — Google Maps address data can contain C0/C1 control characters and the Unicode replacement char (U+FFFD) that render as a square box. `cleanNotes()` in KanbanBoard filters these by codepoint before rendering.
+- **Column header background on drag-over** — `.columnOver .colHeader` now gets `background: var(--surface)` so the header matches the highlighted column correctly.
+
+### Changed
+- **Mobile responsive overhaul** — stats, toolbar, and filter tabs all restack correctly on iPhone and iPad. Filter tabs scroll horizontally. Stats stack vertically at ≤768px. Panel goes full-width on mobile. Kanban board height uses `100dvh` to account for iOS Safari's dynamic address bar.
+- **Kanban card font weights** — name bumped to `font-weight: 600`. Contact font-size reduced to 10px to match date label.
+
+---
+
 ## [1.5.0] — 2026-05-22
 
 ### Added
