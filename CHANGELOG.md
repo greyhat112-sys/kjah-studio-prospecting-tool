@@ -2,6 +2,13 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.3.1] — 2026-05-22
+
+### Fixed
+- **Dropdown selection not saving** — outside-click handler used `mousedown` which fires before `click`, causing the portal list to unmount before `onChange` ran. Added `listRef` to the portal div; outside-click now checks both the trigger and the list, so selecting an option always registers.
+
+---
+
 ## [1.3.0] — 2026-05-22
 
 ### Added
