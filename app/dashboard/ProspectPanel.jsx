@@ -18,7 +18,7 @@ export default function ProspectPanel({ prospect, onClose }) {
       <aside className={styles.panel}>
         <div className={styles.panelHead}>
           <h2 className={styles.panelTitle}>{prospect ? 'Edit Prospect' : 'Add Prospect'}</h2>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">&times;</button>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">[ X ]</button>
         </div>
 
         <form action={formAction} className={styles.panelForm}>
