@@ -106,18 +106,31 @@
 .stats {
   display: flex;
   align-items: flex-end;
-  gap: var(--space-2xl);
-  padding: var(--space-2xl) var(--space-xl) var(--space-lg);
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
 }
 
 .stat { display: flex; flex-direction: column; gap: var(--space-xs); }
 
+/* Status count cluster — right side */
+.statGroup {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+}
+.statGroup .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  padding: 0 var(--space-lg);
+  border-left: 1px solid var(--border);
+}
+
 /* Hero total — Doto dot-matrix, the ONE surprise on this screen */
 .stats > div:first-child .statNum {
   font-family: 'Doto', 'Space Mono', monospace;
-  font-size: 48px;
+  font-size: 80px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -126,7 +139,7 @@
 
 .statNum {
   font-family: 'Space Mono', monospace;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--text-display);
   line-height: 1;
@@ -140,10 +153,10 @@
 
 .statLbl {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-disabled);
 }
 
 /* ── Toolbar (filters + search) ──────────────── */
@@ -151,54 +164,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-md) var(--space-xl);
+  padding: 0 var(--space-xl);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   gap: var(--space-md);
-  flex-wrap: wrap;
 }
 
 .search {
   background: transparent;
   border: none;
-  border-bottom: 1px solid var(--border-visible);
-  padding: 6px 0;
+  border-bottom: 1px solid transparent;
+  padding: var(--space-md) 0;
   font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.06em;
   color: var(--text-display);
   outline: none;
-  width: 180px;
+  width: 200px;
   transition: border-color 200ms;
 }
 .search::placeholder { color: var(--text-disabled); }
-.search:focus { border-bottom-color: var(--text-primary); }
+.search:focus { border-bottom-color: var(--border-visible); }
 
 .filters {
   display: flex;
-  gap: var(--space-xs);
-  flex-wrap: wrap;
+  gap: 0;
 }
 
 .filterTab {
   background: transparent;
-  border: 1px solid var(--border-visible);
-  border-radius: 999px;
-  padding: 6px var(--space-md);
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: var(--space-md) var(--space-md);
+  margin-bottom: -1px;
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-disabled);
   cursor: pointer;
-  transition: color 200ms, border-color 200ms, background 200ms;
+  transition: color 150ms, border-color 150ms;
 }
-.filterTab:hover { color: var(--text-primary); border-color: var(--text-secondary); }
-.filterActive { background: var(--surface); color: var(--text-display); border-color: var(--border-visible); }
+.filterTab:hover { color: var(--text-primary); }
+.filterActive { color: var(--text-display); border-bottom-color: var(--text-display); }
 
 /* ── Table ────────────────────────────────────── */
 .tableWrap {
-  margin: 0 var(--space-xl);
-  border: 1px solid var(--border-visible);
-  border-radius: 12px;
+  margin: var(--space-lg) var(--space-xl);
+  border: 1px solid var(--border);
+  border-radius: 8px;
   overflow: hidden;
   overflow-x: auto;
 }
@@ -209,22 +224,23 @@
   text-align: left;
   padding: var(--space-sm) var(--space-md);
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-disabled);
   background: var(--surface);
-  border-bottom: 1px solid var(--border-visible);
+  border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
 
 .table td {
-  padding: var(--space-md);
+  padding: 10px var(--space-md);
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
 }
 
 .table tr:last-child td { border-bottom: none; }
+.table tbody tr { cursor: default; transition: background 100ms; }
 .table tbody tr:hover td { background: var(--surface); }
 
 .name {

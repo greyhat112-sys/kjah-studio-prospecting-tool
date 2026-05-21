@@ -133,12 +133,14 @@ export default function Dashboard({ prospects: initial }) {
             <span className={styles.statNum}>{prospects.length}</span>
             <span className={styles.statLbl}>Total</span>
           </div>
-          {Object.entries(counts).map(([s, n]) => (
-            <div key={s} className={styles.stat}>
-              <span className={`${styles.statNum} ${styles[`stat_${s}`]}`}>{n}</span>
-              <span className={styles.statLbl}>{STATUS_LABEL[s]}</span>
-            </div>
-          ))}
+          <div className={styles.statGroup}>
+            {Object.entries(counts).map(([s, n]) => (
+              <div key={s} className={styles.stat}>
+                <span className={`${styles.statNum} ${styles[`stat_${s}`]}`}>{n}</span>
+                <span className={styles.statLbl}>{STATUS_LABEL[s]}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Toolbar */}
