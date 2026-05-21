@@ -8,13 +8,17 @@ export default function Dropdown({ name, value, onChange, options, placeholder =
   const [pos, setPos]         = useState({ top: 0, left: 0, width: 0 })
   const [mounted, setMounted] = useState(false)
   const triggerRef            = useRef(null)
+  const listRef               = useRef(null)
 
   useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     if (!open) return
     const onMouse = e => {
-      if (!triggerRef.current?.closest('[data-dd]')?.contains(e.target)) setOpen(false)
+      if (
+        !triggerRef.current?.contains(e.target) &&
+        !listRef.current?.contains(e.target)
+      ) setOpen(false)
     }
     const onKey = e => { if (e.key === 'Escape') setOpen(false) }
     document.addEventListener('mousedown', onMouse)
@@ -51,7 +55,7 @@ export default function Dropdown({ name, value, onChange, options, placeholder =
       </button>
 
       {open && mounted && createPortal(
-        <div className={styles.list} style={{ top: pos.top, left: pos.left, width: pos.width }}>
+        <div ref={listRef} className={styles.list} style={{ top: pos.top, left: pos.left, width: pos.width }}>
           {options.map(opt => (
             <button
               key={opt.value}
