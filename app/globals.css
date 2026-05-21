@@ -46,3 +46,14 @@ html, body {
 input, textarea, select, button { font-family: inherit; font-size: inherit; }
 button { cursor: pointer; }
 select { appearance: none; -webkit-appearance: none; }
+
+/* ── Scrollbars ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-visible) transparent;
+}
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-visible); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-disabled); }
+::-webkit-scrollbar-corner { background: transparent; }

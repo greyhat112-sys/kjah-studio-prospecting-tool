@@ -26,6 +26,10 @@
   padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--border);
   margin-bottom: var(--space-md);
+  position: sticky;
+  top: 0;
+  background: var(--black);
+  z-index: 1;
 }
 
 .colTitle {
@@ -138,3 +142,22 @@
 .cardEdit:hover { color: var(--text-display); }
 .cardDelete { color: var(--text-disabled); }
 .cardDelete:hover { color: var(--status-lost); }
+
+/* ── Mobile ───────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Use dynamic viewport height — accounts for iOS Safari address bar */
+  .board { height: calc(100dvh - 230px); }
+}
+
+@media (max-width: 768px) {
+  .board {
+    padding: 0 var(--space-sm);
+    /* Stats stack taller on mobile → increase offset */
+    height: calc(100dvh - 290px);
+  }
+  .column { min-width: 200px; padding: var(--space-sm); }
+  .colHeader { padding-bottom: var(--space-sm); margin-bottom: var(--space-sm); }
+  .card { padding: var(--space-sm); }
+  .cardName { font-size: 12px; }
+  .cardBiz  { font-size: 10px; }
+}

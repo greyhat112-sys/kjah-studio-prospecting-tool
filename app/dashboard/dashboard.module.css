@@ -691,3 +691,52 @@
   transition: background 200ms, color 200ms;
 }
 .deleteConfirmBtn:hover { background: var(--accent); color: #fff; }
+
+/* ── Mobile — iPad (≤1024px) ──────────────────── */
+@media (max-width: 1024px) {
+  .stats > div:first-child .statNum { font-size: 64px; }
+}
+
+/* ── Mobile — iPhone (≤768px) ────────────────── */
+@media (max-width: 768px) {
+  /* Header — hide secondary items */
+  .appName    { display: none; }
+  .scraperBtn { display: none; }
+  .headerRight { gap: var(--space-xs); }
+  .addBtn, .logoutBtn { padding: var(--space-sm) var(--space-md); }
+
+  /* Stats — stack total on top, pipeline counts below */
+  .stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-lg) var(--space-md);
+  }
+  .stats > div:first-child .statNum { font-size: 56px; }
+  .statGroup {
+    width: 100%;
+    justify-content: flex-start;
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-md);
+  }
+  .statGroup .stat { padding: 0 var(--space-md); }
+  .statGroup .stat:first-child { padding-left: 0; border-left: none; }
+
+  /* Toolbar — filters scroll horizontally, no wrap */
+  .toolbar { padding: 0 var(--space-md); }
+  .filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0; }
+  .filterTab { white-space: nowrap; padding: var(--space-md) var(--space-sm); }
+
+  /* Table */
+  .tableWrap { margin: var(--space-sm) var(--space-md); }
+  .table td  { padding: 8px var(--space-sm); }
+  .table th  { padding: var(--space-xs) var(--space-sm); }
+
+  /* Panel — full width on phone */
+  .panel     { max-width: 100%; }
+  .panelForm { gap: var(--space-lg); padding: var(--space-lg) var(--space-md) var(--space-lg); }
+  .fieldRow  { grid-template-columns: 1fr; }
+
+  /* Confirm box */
+  .confirmBox { max-width: calc(100vw - 32px); padding: var(--space-lg); }
+}
