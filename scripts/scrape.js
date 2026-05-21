@@ -144,13 +144,14 @@ async function run() {
 
   // Go to Google Maps search
   const query = encodeURIComponent(`${keyword} ${city}`)
-  await page.goto(`https://www.google.com/maps/search/${query}`, { waitUntil: 'networkidle', timeout: 30000 })
+  await page.goto(`https://www.google.com/maps/search/${query}`, { waitUntil: 'domcontentloaded', timeout: 60000 })
+  await sleep(3000)
 
   // Dismiss cookie/consent dialogs (EU regions)
   for (const label of ['Accept all', 'Accept', 'Agree', 'Reject all']) {
     await page.locator(`button:has-text("${label}")`).first().click({ timeout: 2000 }).catch(() => {})
   }
-  await sleep(1200)
+  await sleep(1500)
 
   const inserted = []
   let scrollRounds = 0
@@ -179,8 +180,8 @@ async function run() {
       visited.add(href)
 
       try {
-        await page.goto(href, { waitUntil: 'networkidle', timeout: 20000 })
-        await sleep(jitter(800, 600))
+        await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 30000 })
+        await sleep(jitter(1500, 800))
 
         const detail = await extractPlaceDetail(page)
         if (!detail?.name) continue
@@ -228,15 +229,15 @@ async function run() {
         await sleep(jitter(1000, 1000))
 
         // Go back to search results
-        await page.goto(`https://www.google.com/maps/search/${query}`, { waitUntil: 'networkidle', timeout: 20000 })
-        await sleep(jitter(600, 400))
+        await page.goto(`https://www.google.com/maps/search/${query}`, { waitUntil: 'domcontentloaded', timeout: 30000 })
+        await sleep(jitter(1500, 500))
 
       } catch (err) {
         // Skip — go back to search page
         try {
-          await page.goto(`https://www.google.com/maps/search/${query}`, { waitUntil: 'networkidle', timeout: 15000 })
+          await page.goto(`https://www.google.com/maps/search/${query}`, { waitUntil: 'domcontentloaded', timeout: 30000 })
         } catch {}
-        await sleep(500)
+        await sleep(1000)
       }
     }
 
