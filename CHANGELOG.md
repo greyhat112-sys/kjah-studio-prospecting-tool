@@ -2,6 +2,16 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.4.0] — 2026-05-22
+
+### Added
+- **Prospect scraper** (`scripts/scrape.js`) — Playwright-based Google Maps scraper. Searches by keyword + city, extracts business name, category, phone, website, and address. For each result with a website, fetches the homepage and regex-extracts the Instagram handle. Inserts results directly into Supabase as `status: cold, source: google-maps`. Deduplicates against existing prospects by business name.
+- **"Google Maps" source option** — added to the Source dropdown in the prospect panel.
+- `dotenv` and `playwright` added as devDependencies.
+- `npm run scrape` script — usage: `npm run scrape -- "<keyword>" "<city>" [limit]`
+
+---
+
 ## [1.3.1] — 2026-05-22
 
 ### Fixed

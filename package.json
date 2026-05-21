@@ -5,12 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "scrape": "node scripts/scrape.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
     "next": "latest",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "playwright": "^1.40.0"
   }
 }

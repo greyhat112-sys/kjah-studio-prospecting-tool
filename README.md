@@ -70,6 +70,30 @@ CREATE TABLE prospects (
 );
 ```
 
+## Scraper (free, no API key needed)
+
+Scrapes Google Maps by keyword + city, checks each business's website for an Instagram handle, and auto-inserts results into Supabase as Cold prospects.
+
+**One-time setup:**
+```bash
+npm install --save-dev dotenv playwright
+npx playwright install chromium
+```
+
+**Run:**
+```bash
+npm run scrape -- "<keyword>" "<city>" [limit]
+
+# Examples:
+npm run scrape -- "restaurants" "Lagos" 30
+npm run scrape -- "web design agency" "New York" 20
+npm run scrape -- "e-commerce brand" "London" 50
+```
+
+A real Chromium window opens so you can watch it work. If Google shows a CAPTCHA, solve it manually and it continues. Results appear in the dashboard immediately.
+
+> Scraper only runs locally — it is not part of the Vercel deployment.
+
 ## Deploy
 
 Push to `master` → Vercel auto-deploys.

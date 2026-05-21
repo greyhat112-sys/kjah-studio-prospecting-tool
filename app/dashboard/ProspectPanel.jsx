@@ -18,14 +18,15 @@ const PRIORITY_OPTIONS = [
   { value: 'low',    label: 'Low' },
 ]
 const SOURCE_OPTIONS = [
-  { value: '',           label: 'Unknown' },
-  { value: 'instagram',  label: 'Instagram' },
-  { value: 'facebook',   label: 'Facebook' },
-  { value: 'linkedin',   label: 'LinkedIn' },
-  { value: 'referral',   label: 'Referral' },
-  { value: 'cold-dm',    label: 'Cold DM' },
-  { value: 'cold-email', label: 'Cold Email' },
-  { value: 'other',      label: 'Other' },
+  { value: '',            label: 'Unknown' },
+  { value: 'google-maps', label: 'Google Maps' },
+  { value: 'instagram',   label: 'Instagram' },
+  { value: 'facebook',    label: 'Facebook' },
+  { value: 'linkedin',    label: 'LinkedIn' },
+  { value: 'referral',    label: 'Referral' },
+  { value: 'cold-dm',     label: 'Cold DM' },
+  { value: 'cold-email',  label: 'Cold Email' },
+  { value: 'other',       label: 'Other' },
 ]
 const SERVICE_OPTIONS = [
   { value: '',             label: 'Not specified' },
