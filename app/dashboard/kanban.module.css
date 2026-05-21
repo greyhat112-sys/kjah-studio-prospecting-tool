@@ -1,0 +1,133 @@
+.board {
+  display: flex;
+  gap: 0;
+  padding: 0 var(--space-xl);
+  overflow-x: auto;
+  align-items: flex-start;
+  border-top: 1px solid var(--border);
+  min-height: 60vh;
+}
+
+.column {
+  flex: 1;
+  min-width: 200px;
+  padding: var(--space-md);
+  border-right: 1px solid var(--border);
+  transition: background 150ms;
+}
+.column:last-child { border-right: none; }
+.columnOver { background: var(--surface); }
+
+.colHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-md);
+}
+
+.colTitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.col_cold       { color: var(--status-cold); }
+.col_contacted  { color: var(--status-contacted); }
+.col_interested { color: var(--status-interested); }
+.col_converted  { color: var(--status-converted); }
+.col_lost       { color: var(--status-lost); }
+
+.colCount {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-disabled);
+}
+
+.cards { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+.emptyCol {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-disabled);
+  text-align: center;
+  padding: var(--space-xl) 0;
+  border: 1px dashed var(--border-visible);
+  border-radius: 8px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-visible);
+  border-radius: 8px;
+  padding: var(--space-md);
+  cursor: grab;
+  transition: opacity 200ms, border-color 200ms;
+  user-select: none;
+}
+.card:hover { border-color: var(--text-disabled); }
+.card:active { cursor: grabbing; }
+.cardDragging { opacity: 0.35; }
+
+.cardName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-display);
+  margin-bottom: 2px;
+}
+.cardBiz {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+.cardContact {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.cardDate {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-disabled);
+  margin-bottom: 4px;
+}
+.cardNotes {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: var(--space-sm);
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--space-xs);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border);
+}
+.cardEdit, .cardDelete {
+  background: transparent;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  transition: color 150ms;
+}
+.cardEdit   { color: var(--text-secondary); }
+.cardEdit:hover { color: var(--text-display); }
+.cardDelete { color: var(--text-disabled); }
+.cardDelete:hover { color: var(--status-lost); }

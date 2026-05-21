@@ -49,6 +49,13 @@ export async function removeProspect(formData) {
   revalidatePath('/dashboard')
 }
 
+export async function updateStatus(formData) {
+  const id     = formData.get('id')
+  const status = formData.get('status')
+  await updateProspect(id, { status })
+  revalidatePath('/dashboard')
+}
+
 export async function logout() {
   const cookieStore = await cookies()
   cookieStore.delete('session')

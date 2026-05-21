@@ -1,18 +1,17 @@
 'use client'
-import { useState } from 'react'
-import { removeProspect, logout } from './actions'
+import { useState, useEffect, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { removeProspect, logout, updateStatus } from './actions'
 import ProspectPanel from './ProspectPanel'
+import KanbanBoard from './KanbanBoard'
 import styles from './dashboard.module.css'
 
-const STATUSES = ['all', 'cold', 'contacted', 'interested', 'converted', 'lost']
-
+const STATUSES = ['cold', 'contacted', 'interested', 'converted', 'lost']
 const STATUS_LABEL = {
-  cold:       'Cold',
-  contacted:  'Contacted',
-  interested: 'Interested',
-  converted:  'Converted',
-  lost:       'Lost',
+  cold: 'Cold', contacted: 'Contacted', interested: 'Interested',
+  converted: 'Converted', lost: 'Lost',
 }
+const STATUS_ORDER = { cold: 0, contacted: 1, interested: 2, converted: 3, lost: 4 }
 
 function formatDate(str) {
   if (!str) return '—'
@@ -20,29 +19,105 @@ function formatDate(str) {
   return `${d}/${m}/${y}`
 }
 
-export default function Dashboard({ prospects }) {
-  const [filter, setFilter]   = useState('all')
-  const [panel, setPanel]     = useState(null) // null | 'new' | prospect object
-  const [confirm, setConfirm] = useState(null) // prospect to delete
+export default function Dashboard({ prospects: initial }) {
+  const router = useRouter()
+  const [, startTransition] = useTransition()
 
-  const visible = filter === 'all' ? prospects : prospects.filter(p => p.status === filter)
+  const [prospects, setProspects]   = useState(initial)
+  const [view, setView]             = useState('table')
+  const [filter, setFilter]         = useState('all')
+  const [search, setSearch]         = useState('')
+  const [sort, setSort]             = useState({ field: null, dir: 'asc' })
+  const [panel, setPanel]           = useState(null)
+  const [confirm, setConfirm]       = useState(null)
+  const [editStatus, setEditStatus] = useState(null)
 
-  const counts = STATUSES.slice(1).reduce((acc, s) => {
+  // Sync when server refreshes
+  useEffect(() => { setProspects(initial) }, [initial])
+
+  // Auto-refresh every 30s
+  useEffect(() => {
+    const id = setInterval(() => startTransition(() => router.refresh()), 30000)
+    return () => clearInterval(id)
+  }, [router])
+
+  const refresh = () => startTransition(() => router.refresh())
+
+  // Filtered + searched + sorted
+  const visible = [...prospects]
+    .filter(p => filter === 'all' || p.status === filter)
+    .filter(p => {
+      if (!search.trim()) return true
+      const q = search.toLowerCase()
+      return p.name.toLowerCase().includes(q) || p.business.toLowerCase().includes(q)
+    })
+    .sort((a, b) => {
+      if (!sort.field) return 0
+      let av, bv
+      if (sort.field === 'status') {
+        av = STATUS_ORDER[a.status] ?? 0
+        bv = STATUS_ORDER[b.status] ?? 0
+      } else if (sort.field === 'followUp') {
+        av = a.followUp || ''
+        bv = b.followUp || ''
+      } else {
+        av = (a[sort.field] || '').toLowerCase()
+        bv = (b[sort.field] || '').toLowerCase()
+      }
+      if (av < bv) return sort.dir === 'asc' ? -1 : 1
+      if (av > bv) return sort.dir === 'asc' ? 1 : -1
+      return 0
+    })
+
+  const toggleSort = field => setSort(s =>
+    s.field === field && s.dir === 'asc'
+      ? { field, dir: 'desc' }
+      : { field, dir: 'asc' }
+  )
+  const sortIcon = field => sort.field === field ? (sort.dir === 'asc' ? ' ↑' : ' ↓') : ''
+
+  const counts = STATUSES.reduce((acc, s) => {
     acc[s] = prospects.filter(p => p.status === s).length
     return acc
   }, {})
 
+  // Inline status change
+  const handleStatusChange = async (id, newStatus) => {
+    setProspects(prev => prev.map(p => p.id === id ? { ...p, status: newStatus } : p))
+    setEditStatus(null)
+    const fd = new FormData()
+    fd.set('id', id)
+    fd.set('status', newStatus)
+    await updateStatus(fd)
+    refresh()
+  }
+
+  // Kanban drag-drop
+  const handleKanbanDrop = async (prospectId, newStatus) => {
+    setProspects(prev => prev.map(p => p.id === prospectId ? { ...p, status: newStatus } : p))
+    const fd = new FormData()
+    fd.set('id', prospectId)
+    fd.set('status', newStatus)
+    await updateStatus(fd)
+    refresh()
+  }
+
   return (
     <>
       <div className={styles.page}>
+
         {/* Header */}
         <header className={styles.header}>
           <div className={styles.headerLeft}>
             <span className={styles.brand}>KJAH</span>
-            <span className={styles.appName}>Prospecting</span>
+            <span className={styles.appName}>· Prospecting</span>
           </div>
           <div className={styles.headerRight}>
-            <button className={styles.addBtn} onClick={() => setPanel('new')}>+ Add Prospect</button>
+            <div className={styles.viewToggle}>
+              <button className={`${styles.viewBtn} ${view === 'table'  ? styles.viewActive : ''}`} onClick={() => setView('table')}>Table</button>
+              <button className={`${styles.viewBtn} ${view === 'kanban' ? styles.viewActive : ''}`} onClick={() => setView('kanban')}>Kanban</button>
+            </div>
+            <button className={styles.addBtn} onClick={() => setPanel('new')}>+ Add</button>
             <form action={logout}>
               <button type="submit" className={styles.logoutBtn}>Log out</button>
             </form>
@@ -63,36 +138,65 @@ export default function Dashboard({ prospects }) {
           ))}
         </div>
 
-        {/* Filters */}
-        <div className={styles.filters}>
-          {STATUSES.map(s => (
-            <button
-              key={s}
-              className={`${styles.filterTab} ${filter === s ? styles.filterActive : ''}`}
-              onClick={() => setFilter(s)}
-            >
-              {s === 'all' ? 'All' : STATUS_LABEL[s]}
-            </button>
-          ))}
+        {/* Toolbar */}
+        <div className={styles.toolbar}>
+          <div className={styles.filters}>
+            {['all', ...STATUSES].map(s => (
+              <button
+                key={s}
+                className={`${styles.filterTab} ${filter === s ? styles.filterActive : ''}`}
+                onClick={() => setFilter(s)}
+              >
+                {s === 'all' ? 'All' : STATUS_LABEL[s]}
+              </button>
+            ))}
+          </div>
+          <input
+            type="text"
+            className={styles.search}
+            placeholder="SEARCH..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
 
-        {/* Table */}
-        {visible.length === 0 ? (
+        {/* Kanban view */}
+        {view === 'kanban' ? (
+          <KanbanBoard
+            prospects={prospects}
+            search={search}
+            onDrop={handleKanbanDrop}
+            onEdit={p => setPanel(p)}
+            onDelete={p => setConfirm(p)}
+          />
+
+        /* Empty state */
+        ) : visible.length === 0 ? (
           <div className={styles.empty}>
-            <p>No prospects yet{filter !== 'all' ? ` in "${STATUS_LABEL[filter]}"` : ''}.</p>
-            {filter === 'all' && (
-              <button className={styles.addBtn} onClick={() => setPanel('new')}>Add your first prospect</button>
+            <p>
+              {search
+                ? `No results for "${search}"`
+                : filter !== 'all'
+                ? `No ${STATUS_LABEL[filter]} prospects.`
+                : 'No prospects yet.'}
+            </p>
+            {!search && filter === 'all' && (
+              <button className={styles.addBtn} onClick={() => setPanel('new')}>
+                Add your first prospect
+              </button>
             )}
           </div>
+
+        /* Table view */
         ) : (
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Name / Business</th>
-                  <th>Contact</th>
-                  <th>Status</th>
-                  <th>Follow-up</th>
+                  <th className={styles.sortable} onClick={() => toggleSort('name')}>Name / Business{sortIcon('name')}</th>
+                  <th className={styles.sortable} onClick={() => toggleSort('contact')}>Contact{sortIcon('contact')}</th>
+                  <th className={styles.sortable} onClick={() => toggleSort('status')}>Status{sortIcon('status')}</th>
+                  <th className={styles.sortable} onClick={() => toggleSort('followUp')}>Follow-up{sortIcon('followUp')}</th>
                   <th>Notes</th>
                   <th></th>
                 </tr>
@@ -106,15 +210,33 @@ export default function Dashboard({ prospects }) {
                     </td>
                     <td className={styles.contact}>{p.contact || '—'}</td>
                     <td>
-                      <span className={`${styles.badge} ${styles[`badge_${p.status}`]}`}>
-                        {STATUS_LABEL[p.status]}
-                      </span>
+                      {editStatus === p.id ? (
+                        <select
+                          autoFocus
+                          defaultValue={p.status}
+                          className={styles.statusSelect}
+                          onChange={e => handleStatusChange(p.id, e.target.value)}
+                          onBlur={() => setEditStatus(null)}
+                        >
+                          {STATUSES.map(s => (
+                            <option key={s} value={s}>{STATUS_LABEL[s]}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span
+                          className={`${styles.badge} ${styles[`badge_${p.status}`]} ${styles.badgeClick}`}
+                          onClick={() => setEditStatus(p.id)}
+                          title="Click to change"
+                        >
+                          {STATUS_LABEL[p.status]}
+                        </span>
+                      )}
                     </td>
                     <td className={styles.date}>{formatDate(p.followUp)}</td>
                     <td className={styles.notes}>{p.notes || '—'}</td>
                     <td>
                       <div className={styles.rowActions}>
-                        <button className={styles.editBtn} onClick={() => setPanel(p)}>Edit</button>
+                        <button className={styles.editBtn}   onClick={() => setPanel(p)}>Edit</button>
                         <button className={styles.deleteBtn} onClick={() => setConfirm(p)}>Delete</button>
                       </div>
                     </td>
@@ -130,11 +252,11 @@ export default function Dashboard({ prospects }) {
       {panel && (
         <ProspectPanel
           prospect={panel === 'new' ? null : panel}
-          onClose={() => setPanel(null)}
+          onClose={() => { setPanel(null); refresh() }}
         />
       )}
 
-      {/* Delete confirmation */}
+      {/* Delete confirm */}
       {confirm && (
         <div className={styles.overlay} onClick={() => setConfirm(null)}>
           <div className={styles.confirmBox} onClick={e => e.stopPropagation()}>
@@ -143,7 +265,12 @@ export default function Dashboard({ prospects }) {
             </p>
             <div className={styles.confirmActions}>
               <button className={styles.cancelBtn} onClick={() => setConfirm(null)}>Cancel</button>
-              <form action={removeProspect} onSubmit={() => setConfirm(null)}>
+              <form action={async fd => {
+                setProspects(prev => prev.filter(p => p.id !== confirm.id))
+                setConfirm(null)
+                await removeProspect(fd)
+                refresh()
+              }}>
                 <input type="hidden" name="id" value={confirm.id} />
                 <button type="submit" className={styles.deleteConfirmBtn}>Delete</button>
               </form>
