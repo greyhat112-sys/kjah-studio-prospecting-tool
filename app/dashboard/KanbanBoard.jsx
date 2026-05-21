@@ -66,6 +66,7 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
                   e.dataTransfer.effectAllowed = 'move'
                 }}
                 onDragEnd={() => setDragging(null)}
+                onClick={() => onEdit(p)}
               >
                 <div className={styles.cardName}>{p.name}</div>
                 <div className={styles.cardBiz}>{p.business}</div>
@@ -73,8 +74,16 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
                 {p.followUp && <div className={styles.cardDate}>{formatDate(p.followUp)}</div>}
                 {p.notes    && <div className={styles.cardNotes}>{p.notes}</div>}
                 <div className={styles.cardActions}>
-                  <button className={styles.cardEdit}   onClick={() => onEdit(p)}>Edit</button>
-                  <button className={styles.cardDelete} onClick={() => onDelete(p)}>Delete</button>
+                  <button
+                    className={styles.cardEdit}
+                    onMouseDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); onEdit(p) }}
+                  >Edit</button>
+                  <button
+                    className={styles.cardDelete}
+                    onMouseDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); onDelete(p) }}
+                  >Delete</button>
                 </div>
               </div>
             ))}

@@ -3,16 +3,17 @@
   gap: 0;
   padding: 0 var(--space-xl);
   overflow-x: auto;
-  align-items: flex-start;
+  align-items: stretch;
   border-top: 1px solid var(--border);
-  min-height: 60vh;
+  height: calc(100vh - 230px);
 }
 
 .column {
   flex: 1;
-  min-width: 200px;
+  min-width: 220px;
   padding: var(--space-md);
   border-right: 1px solid var(--border);
+  overflow-y: auto;
   transition: background 150ms;
 }
 .column:last-child { border-right: none; }
@@ -71,13 +72,13 @@
   border: 1px solid var(--border-visible);
   border-radius: 8px;
   padding: var(--space-md);
-  cursor: grab;
-  transition: opacity 200ms, border-color 200ms, transform 200ms, box-shadow 200ms;
+  cursor: pointer;
+  transition: opacity 200ms, border-color 200ms, transform 200ms;
   user-select: none;
   animation: cardIn 200ms ease-out both;
 }
 .card:hover { border-color: var(--text-disabled); }
-.card:active { cursor: grabbing; }
+.card.dragging { cursor: grabbing; }
 .cardDragging { opacity: 0.3; transform: rotate(1deg) scale(0.97); }
 
 .cardName {
