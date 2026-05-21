@@ -128,17 +128,13 @@ async function run() {
   console.log(`  Limit   : ${LIMIT}`)
   console.log('─'.repeat(45) + '\n')
 
-  // Connection test
-  console.log('  Testing Supabase connection…')
-  console.log(`  URL : ${process.env.SUPABASE_URL}`)
-  console.log(`  Key : ${SUPABASE_KEY ? SUPABASE_KEY.slice(0, 20) + '…' : 'NOT FOUND'}`)
-  const { data: testData, error: testErr } = await supabase.from('prospects').select('id').limit(1)
+  // Quick connection check
+  const { error: testErr } = await supabase.from('prospects').select('id').limit(1)
   if (testErr) {
-    console.error(`\n  Connection failed: ${testErr.message}`)
+    console.error(`  Connection failed: ${testErr.message}`)
     console.error('  Check SUPABASE_URL and SUPABASE_SERVICE_KEY in .env.local\n')
     process.exit(1)
   }
-  console.log('  Connection OK\n')
 
   const existing = await getExistingBusinesses()
   console.log(`  ${existing.size} prospect(s) already in DB — duplicates will be skipped\n`)

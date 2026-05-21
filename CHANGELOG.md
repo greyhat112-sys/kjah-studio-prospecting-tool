@@ -2,6 +2,20 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.5.0] — 2026-05-22
+
+### Added
+- **Website field** — stored in DB, shown as a clickable link in dashboard table and scraper history. Prospects with no website show a red "No website" label for quick filtering. Also added as an input field in the edit/add panel.
+- **Scraper UI page** (`/dashboard/scraper`) — command generator (keyword, city, limit → live-updating copy-able command), first-time setup instructions, and history table of all Google Maps scraped prospects.
+- **Scraper button** in dashboard header linking to `/dashboard/scraper`.
+
+### Fixed
+- Scraper `networkidle` timeout — Google Maps never reaches networkidle due to background polling. Switched to `domcontentloaded` + explicit sleeps.
+- Scraper env var mismatch — now accepts `SUPABASE_SERVICE_KEY` or `SUPABASE_SERVICE_ROLE_KEY`.
+- Scraper `\r` output trick garbled error messages — removed.
+
+---
+
 ## [1.4.0] — 2026-05-22
 
 ### Added
