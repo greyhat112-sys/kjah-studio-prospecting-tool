@@ -572,6 +572,59 @@
 .saveBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .saveBtn:not(:disabled):hover { opacity: 0.85; }
 
+/* ── Audit checklist ─────────────────────────── */
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.checksGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.checksGroupLabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-disabled);
+  margin-bottom: 2px;
+}
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 2px 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.checkItem input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--text-display);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Progress badge on table rows + kanban cards */
+.checkBadge {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-disabled);
+  margin-top: 4px;
+}
+.checkBadgeFull { color: var(--status-qualified); }
+
 /* ── Panel field grid ────────────────────────── */
 .fieldRow {
   display: grid;

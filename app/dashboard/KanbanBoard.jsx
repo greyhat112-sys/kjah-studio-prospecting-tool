@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { CHECKLIST_TOTAL } from './checklist'
 import styles from './kanban.module.css'
 
 const STATUSES = ['cold', 'qualified', 'contacted', 'interested', 'converted', 'lost']
@@ -94,6 +95,14 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
                 {p.contact  && <div className={styles.cardContact}>{p.contact}</div>}
                 {p.followUp && <div className={styles.cardDate}>{formatDate(p.followUp)}</div>}
                 {p.notes    && <div className={styles.cardNotes}>{p.notes}</div>}
+                {(p.checks?.length ?? 0) > 0 && (
+                  <div className={[
+                    styles.cardChecks,
+                    p.checks.length === CHECKLIST_TOTAL ? styles.cardChecksFull : '',
+                  ].filter(Boolean).join(' ')}>
+                    {p.checks.length}/{CHECKLIST_TOTAL} checks
+                  </div>
+                )}
                 <div
                   className={styles.cardActions}
                   draggable={false}

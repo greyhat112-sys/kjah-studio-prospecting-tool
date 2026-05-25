@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { removeProspect, logout, updateStatus } from './actions'
 import ProspectPanel from './ProspectPanel'
 import KanbanBoard from './KanbanBoard'
+import { CHECKLIST_TOTAL } from './checklist'
 import styles from './dashboard.module.css'
 
 const STATUSES = ['cold', 'qualified', 'contacted', 'interested', 'converted', 'lost']
@@ -218,6 +219,11 @@ export default function Dashboard({ prospects: initial }) {
                           <div className={styles.name}>{p.name}</div>
                           <div className={styles.biz}>{p.business}</div>
                           {p.assignedTo && <div className={styles.assigned}>{p.assignedTo}</div>}
+                          {(p.checks?.length ?? 0) > 0 && (
+                            <div className={`${styles.checkBadge} ${p.checks.length === CHECKLIST_TOTAL ? styles.checkBadgeFull : ''}`}>
+                              {p.checks.length}/{CHECKLIST_TOTAL} checks
+                            </div>
+                          )}
                         </div>
                       </div>
                     </td>

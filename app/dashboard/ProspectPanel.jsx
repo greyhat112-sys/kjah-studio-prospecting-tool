@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useActionState } from 'react'
 import { createProspect, editProspect, addActivity } from './actions'
 import Dropdown from './Dropdown'
+import { CHECKLIST, CHECKLIST_GROUPS } from './checklist'
 import styles from './dashboard.module.css'
 
 const STATUS_OPTIONS = [
@@ -169,6 +170,28 @@ export default function ProspectPanel({ prospect, onClose }) {
             Notes
             <textarea name="notes" defaultValue={prospect?.notes ?? ''} className={`${styles.field} ${styles.textarea}`} rows={3} placeholder="Any relevant notes…" />
           </label>
+
+          <div className={styles.fieldLabel}>
+            Audit Checklist
+            <div className={styles.checks}>
+              {CHECKLIST_GROUPS.map(group => (
+                <div key={group.id} className={styles.checksGroup}>
+                  <p className={styles.checksGroupLabel}>{group.label}</p>
+                  {CHECKLIST.filter(c => c.group === group.id).map(item => (
+                    <label key={item.id} className={styles.checkItem}>
+                      <input
+                        type="checkbox"
+                        name="checks"
+                        value={item.id}
+                        defaultChecked={prospect?.checks?.includes(item.id) ?? false}
+                      />
+                      <span>{item.label}</span>
+                    </label>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
 
           {state?.error && <p className={styles.formError}>{state.error}</p>}
 

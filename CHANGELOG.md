@@ -2,6 +2,21 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.9.0] — 2026-05-26
+
+### Added
+- **Per-prospect audit checklist** — 6 ticked-or-not items grouped into "Pitch angle" (No website / Site needs redesign / Needs funnel / Needs automation) and "Positive signals" (Active on social / Has reviews). The first four map 1:1 to KJAH service offerings — a ticked box is a known pitch angle. Renders as checkbox group in the prospect panel below Notes.
+- **Progress badge on cards + table rows** — shows `n/6 checks` once at least one box is ticked, so you see at a glance how far through the audit each prospect is. Turns lavender (matches the Qualified stage colour) when all six are ticked.
+- **Single source of truth** at `app/dashboard/checklist.js` — adding/removing/renaming items in the future is a one-file change; the DB schema (a JSONB array of IDs) stays put.
+
+### Migration required
+Run in Supabase SQL editor before deploying:
+```sql
+ALTER TABLE prospects ADD COLUMN checks JSONB DEFAULT '[]'::jsonb;
+```
+
+---
+
 ## [1.8.0] — 2026-05-26
 
 ### Added

@@ -18,6 +18,7 @@ function extractFields(formData) {
     assignedTo: formData.get('assignedTo')?.trim() || '',
     followUp:   formData.get('followUp')           || '',
     notes:      formData.get('notes')?.trim()      || '',
+    checks:     formData.getAll('checks')          || [],
   }
 }
 

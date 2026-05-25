@@ -124,6 +124,16 @@
   margin-bottom: var(--space-sm);
 }
 .cardWebsite:hover { text-decoration: underline; }
+
+.cardChecks {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-disabled);
+  margin-bottom: var(--space-sm);
+}
+.cardChecksFull { color: var(--status-qualified); }
 .cardContact {
   font-family: 'Space Mono', monospace;
   font-size: 10px;
