@@ -18,11 +18,12 @@ Single-password login. Set env vars and the session is stateless (SHA-256 httpOn
 
 ## Features
 
-- **Table view** — sortable columns, filter tabs, search, inline status editing
-- **Kanban view** — drag-and-drop across 5 pipeline stages
-- **Prospect fields** — Name, Business, Contact, Status, Priority, Source, Service, Assigned To, Follow-up Date, Notes
+- **Table view** — sortable columns, filter tabs, search, inline status editing, clickable Name/Business cell opens the detail panel
+- **Kanban view** — drag-and-drop across 5 pipeline stages with priority-coloured left borders
+- **Prospect fields** — Name, Business, Contact (phone/handle), Email (`mailto:` link), Website, Status, Priority, Source, Service, Assigned To, Follow-up Date, Notes
 - **Activity Log** — per-prospect timestamped notes (optimistic UI)
 - **30s auto-refresh** — stays in sync across team members
+- **Built-in scraper UI** at `/dashboard/scraper` — generates the command line, lists previously scraped prospects
 
 ## Pipeline
 
@@ -57,6 +58,8 @@ CREATE TABLE prospects (
   name         TEXT NOT NULL,
   business     TEXT NOT NULL,
   contact      TEXT,
+  email        TEXT,
+  website      TEXT,
   status       TEXT DEFAULT 'cold',
   follow_up    DATE,
   notes        TEXT,
@@ -68,11 +71,15 @@ CREATE TABLE prospects (
   created_at   TIMESTAMPTZ DEFAULT now(),
   updated_at   TIMESTAMPTZ
 );
+
+-- If migrating an existing table, add the columns separately:
+--   ALTER TABLE prospects ADD COLUMN email   TEXT;
+--   ALTER TABLE prospects ADD COLUMN website TEXT;
 ```
 
 ## Scraper (free, no API key needed)
 
-Scrapes Google Maps by keyword + city, checks each business's website for an Instagram handle, and auto-inserts results into Supabase as Cold prospects.
+Scrapes Google Maps by keyword + city, fetches each business's website to extract an Instagram handle and a contact email (when one is publicly listed), and auto-inserts results into Supabase as Cold prospects. Prospects without an email stay blank so it's obvious which still need a manual lookup.
 
 **One-time setup:**
 ```bash
