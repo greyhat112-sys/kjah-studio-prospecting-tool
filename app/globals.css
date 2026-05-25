@@ -27,6 +27,7 @@
 
   /* Status mapped to Nothing tokens */
   --status-cold:       #666666;
+  --status-qualified:  #A493C7;
   --status-contacted:  #5B9BF6;
   --status-interested: #D4A843;
   --status-converted:  #4A9E5C;

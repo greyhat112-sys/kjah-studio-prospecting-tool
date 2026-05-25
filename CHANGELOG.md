@@ -2,6 +2,16 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.8.0] — 2026-05-26
+
+### Added
+- **"Qualified" pipeline stage** — sits between Cold and Contacted. The intended flow: scraped raw prospects land in Cold; once you've checked their site/details and they're ready to reach out, drag them to Qualified; then move to Contacted once outreach happens. New status badge, kanban column, stat counter, filter tab, and dropdown option — all colour-tokenised as `--status-qualified` (soft lavender `#A493C7`). Updated `STATUS_ORDER` so sort-by-status keeps the new ordering.
+
+### Changed
+- **Stat counter row scrolls horizontally on mobile** — with 6 status counts now, the row could overflow on narrow phones. Added `overflow-x: auto` + `flex-shrink: 0` on the mobile stat group so the 6th stat isn't clipped.
+
+---
+
 ## [1.7.0] — 2026-05-26
 
 ### Added

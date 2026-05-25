@@ -2,9 +2,9 @@
 import { useState } from 'react'
 import styles from './kanban.module.css'
 
-const STATUSES = ['cold', 'contacted', 'interested', 'converted', 'lost']
+const STATUSES = ['cold', 'qualified', 'contacted', 'interested', 'converted', 'lost']
 const STATUS_LABEL = {
-  cold: 'Cold', contacted: 'Contacted', interested: 'Interested',
+  cold: 'Cold', qualified: 'Qualified', contacted: 'Contacted', interested: 'Interested',
   converted: 'Converted', lost: 'Lost',
 }
 

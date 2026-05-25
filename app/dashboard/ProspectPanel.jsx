@@ -7,6 +7,7 @@ import styles from './dashboard.module.css'
 
 const STATUS_OPTIONS = [
   { value: 'cold',       label: 'Cold' },
+  { value: 'qualified',  label: 'Qualified' },
   { value: 'contacted',  label: 'Contacted' },
   { value: 'interested', label: 'Interested' },
   { value: 'converted',  label: 'Converted' },

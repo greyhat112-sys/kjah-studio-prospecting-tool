@@ -7,12 +7,12 @@ import ProspectPanel from './ProspectPanel'
 import KanbanBoard from './KanbanBoard'
 import styles from './dashboard.module.css'
 
-const STATUSES = ['cold', 'contacted', 'interested', 'converted', 'lost']
+const STATUSES = ['cold', 'qualified', 'contacted', 'interested', 'converted', 'lost']
 const STATUS_LABEL = {
-  cold: 'Cold', contacted: 'Contacted', interested: 'Interested',
+  cold: 'Cold', qualified: 'Qualified', contacted: 'Contacted', interested: 'Interested',
   converted: 'Converted', lost: 'Lost',
 }
-const STATUS_ORDER = { cold: 0, contacted: 1, interested: 2, converted: 3, lost: 4 }
+const STATUS_ORDER = { cold: 0, qualified: 1, contacted: 2, interested: 3, converted: 4, lost: 5 }
 
 function formatDate(str) {
   if (!str) return '—'

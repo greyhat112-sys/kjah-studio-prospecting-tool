@@ -146,6 +146,7 @@
 }
 
 .statNum.stat_cold       { color: var(--status-cold); }
+.statNum.stat_qualified  { color: var(--status-qualified); }
 .statNum.stat_contacted  { color: var(--status-contacted); }
 .statNum.stat_interested { color: var(--status-interested); }
 .statNum.stat_converted  { color: var(--status-converted); }
@@ -309,6 +310,7 @@
   border: 1px solid;
 }
 .badge_cold       { color: var(--status-cold);       border-color: rgba(102,102,102,0.35); background: rgba(102,102,102,0.08); }
+.badge_qualified  { color: var(--status-qualified);  border-color: rgba(164,147,199,0.35); background: rgba(164,147,199,0.08); }
 .badge_contacted  { color: var(--status-contacted);  border-color: rgba(91,155,246,0.35);  background: rgba(91,155,246,0.08);  }
 .badge_interested { color: var(--status-interested); border-color: rgba(212,168,67,0.35);  background: rgba(212,168,67,0.08);  }
 .badge_converted  { color: var(--status-converted);  border-color: rgba(74,158,92,0.35);   background: rgba(74,158,92,0.08);   }
@@ -731,8 +733,9 @@
     justify-content: flex-start;
     border-top: 1px solid var(--border);
     padding-top: var(--space-md);
+    overflow-x: auto;
   }
-  .statGroup .stat { padding: 0 var(--space-md); }
+  .statGroup .stat { padding: 0 var(--space-md); flex-shrink: 0; }
   .statGroup .stat:first-child { padding-left: 0; border-left: none; }
 
   /* Toolbar — filters scroll horizontally, no wrap */

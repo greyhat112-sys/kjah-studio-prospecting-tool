@@ -42,6 +42,7 @@
   color: var(--text-secondary);
 }
 .col_cold       { color: var(--status-cold); }
+.col_qualified  { color: var(--status-qualified); }
 .col_contacted  { color: var(--status-contacted); }
 .col_interested { color: var(--status-interested); }
 .col_converted  { color: var(--status-converted); }
