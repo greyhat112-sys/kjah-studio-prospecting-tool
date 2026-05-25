@@ -261,6 +261,7 @@
   color: var(--text-secondary);
 }
 .websiteCell { max-width: 180px; }
+.emailCell { max-width: 180px; }
 .websiteLink {
   font-family: 'Space Mono', monospace;
   font-size: 11px;
@@ -381,8 +382,15 @@
 /* ── Priority dot ─────────────────────────────── */
 .nameCell { display: flex; align-items: flex-start; gap: 10px; }
 /* min-width:0 lets the text block shrink below content size so it can ellipsis */
-.nameText { min-width: 0; }
+.nameText { min-width: 0; max-width: 280px; }
 .nameTd { cursor: pointer; }
+/* Name/business truncate to a single line on every viewport */
+.name, .biz, .assigned {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
 
 .dot {
   width: 7px;
@@ -698,16 +706,8 @@
 /* ── Mobile — iPad (≤1024px) ──────────────────── */
 @media (max-width: 1024px) {
   .stats > div:first-child .statNum { font-size: 64px; }
-
-  /* Truncate name/business to one line each so the column can't crush the
-     text into many wrapped lines (which made rows extremely tall). */
+  /* Tighter name column on narrow screens (truncation rules are global) */
   .nameText { max-width: 200px; }
-  .name, .biz, .assigned {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
 }
 
 /* ── Mobile — iPhone (≤768px) ────────────────── */

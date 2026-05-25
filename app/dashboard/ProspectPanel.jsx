@@ -115,10 +115,16 @@ export default function ProspectPanel({ prospect, onClose }) {
             <input name="business" defaultValue={prospect?.business ?? ''} className={styles.field} placeholder="e.g. Acme Corp" required />
           </label>
 
-          <label className={styles.fieldLabel}>
-            Contact
-            <input name="contact" defaultValue={prospect?.contact ?? ''} className={styles.field} placeholder="@handle · email · phone" />
-          </label>
+          <div className={styles.fieldRow}>
+            <label className={styles.fieldLabel}>
+              Contact
+              <input name="contact" defaultValue={prospect?.contact ?? ''} className={styles.field} placeholder="@handle · phone" />
+            </label>
+            <label className={styles.fieldLabel}>
+              Email
+              <input type="email" name="email" defaultValue={prospect?.email ?? ''} className={styles.field} placeholder="name@company.com" />
+            </label>
+          </div>
 
           <label className={styles.fieldLabel}>
             Website

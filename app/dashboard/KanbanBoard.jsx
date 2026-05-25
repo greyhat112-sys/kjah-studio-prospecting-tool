@@ -14,15 +14,6 @@ function formatDate(str) {
   return `${d}/${m}/${y}`
 }
 
-function cleanNotes(str) {
-  if (!str) return str
-  return Array.from(str).filter(ch => {
-    const c = ch.codePointAt(0)
-    // Drop C0 controls (0-31), DEL (127), C1 controls (128-159), U+FFFD (65533)
-    return c >= 32 && c !== 127 && (c < 128 || c > 159) && c !== 65533
-  }).join('').trim()
-}
-
 export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelete }) {
   const [dragging, setDragging] = useState(null)
   const [dragOver, setDragOver] = useState(null)
@@ -102,7 +93,7 @@ export default function KanbanBoard({ prospects, search, onDrop, onEdit, onDelet
                 )}
                 {p.contact  && <div className={styles.cardContact}>{p.contact}</div>}
                 {p.followUp && <div className={styles.cardDate}>{formatDate(p.followUp)}</div>}
-                {p.notes    && <div className={styles.cardNotes}>{cleanNotes(p.notes)}</div>}
+                {p.notes    && <div className={styles.cardNotes}>{p.notes}</div>}
                 <div
                   className={styles.cardActions}
                   draggable={false}

@@ -9,6 +9,7 @@ function extractFields(formData) {
     name:       formData.get('name')?.trim(),
     business:   formData.get('business')?.trim(),
     contact:    formData.get('contact')?.trim()    || '',
+    email:      formData.get('email')?.trim()      || '',
     website:    formData.get('website')?.trim()    || '',
     status:     formData.get('status')             || 'cold',
     priority:   formData.get('priority')           || 'medium',

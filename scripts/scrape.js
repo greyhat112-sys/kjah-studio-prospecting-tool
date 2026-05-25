@@ -43,7 +43,12 @@ async function getExistingBusinesses() {
   return new Set((data || []).map(p => p.business?.toLowerCase().trim()).filter(Boolean))
 }
 
-async function findInstagram(url) {
+// Email addresses that are placeholders / third-party noise, not real contacts
+const EMAIL_SKIP = /(example\.|yourdomain|@domain|@email\.com|@test\.|sentry|wixpress|\.png$|\.jpe?g$|\.gif$|\.svg$|\.webp$)/
+
+// Fetch a business website once; extract its Instagram handle and a contact email.
+async function scrapeWebsite(url) {
+  const out = { instagram: null, email: null }
   try {
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), 7000)
@@ -55,16 +60,21 @@ async function findInstagram(url) {
       },
     })
     clearTimeout(timer)
-    if (!res.ok) return null
+    if (!res.ok) return out
     const html = await res.text()
-    const match = html.match(/instagram\.com\/([\w.]{2,30})/i)
-    if (match && !IG_SKIP.has(match[1].toLowerCase())) {
-      return `@${match[1]}`
-    }
+
+    const ig = html.match(/instagram\.com\/([\w.]{2,30})/i)
+    if (ig && !IG_SKIP.has(ig[1].toLowerCase())) out.instagram = `@${ig[1]}`
+
+    // Prefer mailto: links, fall back to plain-text addresses in the page
+    const mailto = [...html.matchAll(/mailto:([^"'?\s>]+@[^"'?\s>]+)/gi)].map(m => m[1])
+    const plain  = html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || []
+    const email  = [...mailto, ...plain].find(e => !EMAIL_SKIP.test(e.toLowerCase()))
+    if (email) out.email = email.toLowerCase()
   } catch {
     // network error, timeout, etc — skip silently
   }
-  return null
+  return out
 }
 
 // ── Supabase ─────────────────────────────────────────────────────────────────
@@ -200,10 +210,13 @@ async function run() {
           continue
         }
 
-        // Check website for Instagram handle
+        // Check website for Instagram handle + email
         let instagram = null
+        let email = null
         if (detail.website) {
-          instagram = await findInstagram(detail.website)
+          const site = await scrapeWebsite(detail.website)
+          instagram = site.instagram
+          email     = site.email
         }
 
         const contactParts = [detail.phone, instagram].filter(Boolean)
@@ -213,6 +226,7 @@ async function run() {
           name:     detail.name,
           business: detail.name,
           contact:  contactParts.join(' · '),
+          email:    email || null,
           website:  detail.website || null,
           status:   'cold',
           source:   'google-maps',
@@ -229,9 +243,10 @@ async function run() {
         inserted.push(row)
 
         const ig  = instagram ? ` · ${instagram}` : ''
+        const em  = email ? ` · ${email}` : ''
         const ph  = detail.phone ? ` · ${detail.phone}` : ''
         const web = detail.website ? ` · ${detail.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}` : ' · no website'
-        console.log(`  [${String(inserted.length).padStart(2)}/${LIMIT}] ${detail.name}${ph}${ig}${web}`)
+        console.log(`  [${String(inserted.length).padStart(2)}/${LIMIT}] ${detail.name}${ph}${em}${ig}${web}`)
 
         await sleep(jitter(1000, 1000))
 

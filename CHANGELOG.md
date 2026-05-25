@@ -2,6 +2,26 @@
 
 All notable changes to KJAH Prospecting Tool.
 
+## [1.7.0] — 2026-05-26
+
+### Added
+- **Dedicated Email field** — separate from the freeform Contact field. Stored on the prospect, shown as its own table column with a `mailto:` link, and added to the add/edit panel (paired with Contact in a single row). Empty when not known so it's obvious which prospects still need an email looked up.
+- **Scraper extracts email** — the website fetch that already pulls an Instagram handle now also extracts a contact email (prefers `mailto:` links, falls back to plain-text addresses, skips obvious noise like `example.com`, `wixpress`, image filenames). Many sites won't expose one — those just stay blank.
+
+### Fixed
+- **Square character in notes** — the previous codepoint filter only stripped C0/C1 controls and U+FFFD, but the real culprit was a Private Use Area glyph injected by Google Maps' address element (a Material Icons "location pin" codepoint). New sanitizer in `lib/kv.js#toProspect` strips PUA + control + replacement chars at the read source, so the fix covers existing DB rows and every view (table + kanban + panel). The per-view `cleanNotes` in KanbanBoard was removed — single source of truth.
+
+### Changed
+- **Name/Business truncation now applies on desktop too** — `.nameText` capped at 280px on desktop, 200px on tablet, 150px on phone. Truncation properties moved out of the media query into base CSS.
+
+### Migration required
+Run in Supabase SQL editor before deploying:
+```sql
+ALTER TABLE prospects ADD COLUMN email TEXT;
+```
+
+---
+
 ## [1.6.2] — 2026-05-22
 
 ### Fixed

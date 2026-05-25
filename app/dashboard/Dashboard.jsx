@@ -200,6 +200,7 @@ export default function Dashboard({ prospects: initial }) {
                 <tr>
                   <th className={styles.sortable} onClick={() => toggleSort('name')}>Name / Business{sortIcon('name')}</th>
                   <th className={styles.sortable} onClick={() => toggleSort('contact')}>Contact{sortIcon('contact')}</th>
+                  <th>Email</th>
                   <th>Website</th>
                   <th className={styles.sortable} onClick={() => toggleSort('status')}>Status{sortIcon('status')}</th>
                   <th className={styles.sortable} onClick={() => toggleSort('followUp')}>Follow-up{sortIcon('followUp')}</th>
@@ -221,6 +222,11 @@ export default function Dashboard({ prospects: initial }) {
                       </div>
                     </td>
                     <td className={styles.contact}>{p.contact || '—'}</td>
+                    <td className={styles.emailCell}>
+                      {p.email
+                        ? <a href={`mailto:${p.email}`} className={styles.websiteLink}>{p.email}</a>
+                        : null}
+                    </td>
                     <td className={styles.websiteCell}>
                       {p.website
                         ? <a href={p.website} target="_blank" rel="noopener noreferrer" className={styles.websiteLink}>
